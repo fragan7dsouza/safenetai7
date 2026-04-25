@@ -125,7 +125,8 @@ function sendRuntimeMessage(message) {
     });
   });
 }
-
+/*i honestly dont know what im doing and this is a mess but it works so here we are doing something we have no clue about cause who cares about code quality 
+   if you are reading this, congrats you are one in a million finding stuff in code ony scholars can dream of*/
 async function requestUnifiedEmailRisk(emailText, senderDomain) {
   const response = await sendRuntimeMessage({
     action: 'scanUnifiedRisk',
@@ -159,7 +160,16 @@ async function requestUnifiedLinkRisk(url) {
 
   return response.data;
 }
-
+async function requestComposeGuardLinkRisk(url){
+  const response = await sendRuntimeMEssage{{
+    action: 'scanComposeLink',
+    payload: {
+      url,
+      platform
+    }
+  }}
+  }
+}
 async function requestComposeGuard(draftText, recipients) {
   const response = await sendRuntimeMessage({
     action: 'scanComposeDraft',

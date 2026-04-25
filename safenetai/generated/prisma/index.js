@@ -88,9 +88,6 @@ Prisma.NullTypes = {
  * Enums
  */
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
-  ReadUncommitted: 'ReadUncommitted',
-  ReadCommitted: 'ReadCommitted',
-  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -163,11 +160,6 @@ exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
-exports.Prisma.QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-};
-
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
@@ -177,6 +169,11 @@ exports.Prisma.JsonNullValueFilter = {
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 exports.ScanType = exports.$Enums.ScanType = {
   link: 'link',
@@ -221,7 +218,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/pskth/projects/safenetai7/safenetai/generated/prisma",
+      "value": "C:\\Work\\safenetai7\\safenetai\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -230,12 +227,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "windows",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/pskth/projects/safenetai7/safenetai/prisma/schema.prisma",
+    "sourceFilePath": "C:\\Work\\safenetai7\\safenetai\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -248,8 +245,7 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "postgresql",
-  "postinstall": false,
+  "activeProvider": "sqlite",
   "inlineDatasources": {
     "db": {
       "url": {
@@ -258,8 +254,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider  = \"postgresql\"\n  url       = env(\"DATABASE_URL\")\n  directUrl = env(\"DIRECT_URL\")\n}\n\nenum ScanType {\n  link\n  email\n  document\n  domain\n}\n\nenum ScanStatus {\n  safe\n  suspicious\n  dangerous\n}\n\nenum ReportType {\n  link\n  email\n  document\n  other\n}\n\nenum ReportStatus {\n  pending\n  approved\n  rejected\n}\n\nmodel User {\n  id           String       @id @default(cuid())\n  email        String       @unique\n  name         String?\n  passwordHash String\n  createdAt    DateTime     @default(now())\n  updatedAt    DateTime     @updatedAt\n  scans        Scan[]\n  reports      Report[]\n  uploads      FileUpload[]\n}\n\nmodel Scan {\n  id          String     @id @default(cuid())\n  type        ScanType\n  status      ScanStatus\n  inputText   String?\n  inputUrl    String?\n  inputDomain String?\n  confidence  Float?\n  riskScore   Int?\n  explanation String?\n  keywords    Json?\n  rawResponse Json\n  createdAt   DateTime   @default(now())\n  userId      String?\n  user        User?      @relation(fields: [userId], references: [id], onDelete: SetNull)\n\n  @@index([userId, createdAt])\n  @@index([type, createdAt])\n}\n\nmodel Report {\n  id                   String       @id @default(cuid())\n  title                String\n  type                 ReportType\n  description          String\n  url                  String?\n  email                String?\n  reporterInfo         String?\n  status               ReportStatus @default(pending)\n  moderationVerdict    String?\n  moderationReason     String?\n  moderationConfidence Float?\n  moderationRaw        Json?\n  createdAt            DateTime     @default(now())\n  updatedAt            DateTime     @updatedAt\n  approvedAt           DateTime?\n  userId               String?\n  user                 User?        @relation(fields: [userId], references: [id], onDelete: SetNull)\n  uploads              FileUpload[]\n\n  @@index([status, createdAt])\n  @@index([userId, createdAt])\n}\n\nmodel FileUpload {\n  id         String   @id @default(cuid())\n  fileName   String\n  mimeType   String\n  sizeBytes  Int\n  base64Data String\n  createdAt  DateTime @default(now())\n  reportId   String?\n  report     Report?  @relation(fields: [reportId], references: [id], onDelete: Cascade)\n  userId     String?\n  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)\n\n  @@index([reportId])\n  @@index([userId, createdAt])\n}\n",
-  "inlineSchemaHash": "57be80cc8ce0525388bc2ba91a5a62b9e681c10d6b6ccfbbd7b6a7c072587067",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nenum ScanType {\n  link\n  email\n  document\n  domain\n}\n\nenum ScanStatus {\n  safe\n  suspicious\n  dangerous\n}\n\nenum ReportType {\n  link\n  email\n  document\n  other\n}\n\nenum ReportStatus {\n  pending\n  approved\n  rejected\n}\n\nmodel User {\n  id           String       @id @default(cuid())\n  email        String       @unique\n  name         String?\n  passwordHash String\n  createdAt    DateTime     @default(now())\n  updatedAt    DateTime     @updatedAt\n  scans        Scan[]\n  reports      Report[]\n  uploads      FileUpload[]\n}\n\nmodel Scan {\n  id          String     @id @default(cuid())\n  type        ScanType\n  status      ScanStatus\n  inputText   String?\n  inputUrl    String?\n  inputDomain String?\n  confidence  Float?\n  riskScore   Int?\n  explanation String?\n  keywords    Json?\n  rawResponse Json\n  createdAt   DateTime   @default(now())\n  userId      String?\n  user        User?      @relation(fields: [userId], references: [id], onDelete: SetNull)\n\n  @@index([userId, createdAt])\n  @@index([type, createdAt])\n}\n\nmodel Report {\n  id                   String       @id @default(cuid())\n  title                String\n  type                 ReportType\n  description          String\n  url                  String?\n  email                String?\n  reporterInfo         String?\n  status               ReportStatus @default(pending)\n  moderationVerdict    String?\n  moderationReason     String?\n  moderationConfidence Float?\n  moderationRaw        Json?\n  createdAt            DateTime     @default(now())\n  updatedAt            DateTime     @updatedAt\n  approvedAt           DateTime?\n  userId               String?\n  user                 User?        @relation(fields: [userId], references: [id], onDelete: SetNull)\n  uploads              FileUpload[]\n\n  @@index([status, createdAt])\n  @@index([userId, createdAt])\n}\n\nmodel FileUpload {\n  id         String   @id @default(cuid())\n  fileName   String\n  mimeType   String\n  sizeBytes  Int\n  base64Data String\n  createdAt  DateTime @default(now())\n  reportId   String?\n  report     Report?  @relation(fields: [reportId], references: [id], onDelete: Cascade)\n  userId     String?\n  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)\n\n  @@index([reportId])\n  @@index([userId, createdAt])\n}\n",
+  "inlineSchemaHash": "325ac471928a9563434e9b6ce5f7f979916ab086063d4844f1067cdcd0b31ee2",
   "copyEngine": true
 }
 
@@ -298,8 +294,8 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
-path.join(process.cwd(), "generated/prisma/libquery_engine-debian-openssl-3.0.x.so.node")
+path.join(__dirname, "query_engine-windows.dll.node");
+path.join(process.cwd(), "generated/prisma/query_engine-windows.dll.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "generated/prisma/schema.prisma")

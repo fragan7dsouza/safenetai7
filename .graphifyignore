@@ -1,0 +1,8 @@
+node_modules/
+dist/
+vendor/
+*.generated.py
+.next/
+extension-build/
+generated/
+graphify-out/
